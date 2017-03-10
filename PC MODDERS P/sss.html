@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+	<head>
+		<script>
+		
+			var ipAddress = []; 
+			var prefix;
+			var no_of_networks;
+			var	array_of_networks = [];
+			
+			function submitIPandNetworks()
+			{
+				
+				//stores the new content of the 'subnetting-info' div 
+				var subnettingInfo_content = ' ';
+				
+				//gets the div with a class name of 'subnetting-info'
+				var subnettingInfo = document.getElementsByClassName('subnetting-info')[0];
+				
+				//gets all of the input tags a class name of 'ipaddress' inside a div with a class name of 'subnetting-info'
+				var  subnettingInfo_inputs = subnettingInfo.getElementsByClassName('ipaddress');
+				
+				//stores all the values of subnettingInfo input fields to the variable ipAddress 
+				for (var i = 0; i < subnettingInfo_inputs.length; i++)
+				{
+					if ( i < subnettingInfo_inputs.length-1 )
+					{
+						ipAddress.push(parseInt(subnettingInfo_inputs[i].value));
+					}
+					else
+					{
+						ipAddress.push(parseInt(subnettingInfo_inputs[i].value));
+					}
+				} 
+				
+				//gets the prefix
+				prefix = document.getElementById('prefix').value;
+				
+				//gets the number of networks
+				no_of_networks = document.getElementById('no-of-networks').value;
+				
+				
+				
+				//displays the new content
+				subnettingInfo_content += '<p><strong>Ip Address:</strong>';
+				for ( var i = 0; i < ipAddress.length; i++)
+				{
+					subnettingInfo_content += i<ipAddress.length-1?ipAddress[i]+'.':ipAddress[i]+'/'+prefix;
+				}
+				subnettingInfo_content += '</p>';
+				
+				subnettingInfo_content += '<p><strong>Number of Networks:</strong>'+no_of_networks+'</p>';
+				subnettingInfo.innerHTML = subnettingInfo_content;
+				
+				displayNetworkInputs();
+			}
+			
+			function displayNetworkInputs()
+			{
+				//gets a div with a class name of 'networks_input'
+				var networks_input = document.getElementsByClassName('networks-input')[0]; 
+				var networks_input_content = '';
+				
+				//create inputs based on the number of networks
+				for ( var i = 1; i <= no_of_networks; i++ )
+				{
+					networks_input_content += '<fieldset><legend>Network#'+i+'</legend>';
+					networks_input_content += 'Name:<input><br/>';
+					networks_input_content += 'Hosts:<input type=\'number\'>';
+					networks_input_content += '</fieldset>';
+				}
+				
+				networks_input_content += '<button onclick=\'storeToArray()\'>Next</button>';
+				
+				networks_input.innerHTML = networks_input_content;
+			}
+			
+			function storeToArray()
+			{
+				var fieldset = document.getElementsByTagName('fieldset');
+				var networks_input = document.getElementsByClassName('networks-input')[0]; 
+				var networks_input_content = ' ';
+				
+				
+				//stores all the input to an array
+				for (var i = 0; i < fieldset.length; i++)
+				{
+					array_of_networks.push([fieldset[i].getElementsByTagName('input')[0].value,fieldset[i].getElementsByTagName('input')[1].value]);
+				}
+				
+				/*sorts array to descending
+				for (var i = 0; i < array_of_networks.length; i++)
+				{
+					for (var j = 0; j < array_of_networks.length;j++)
+					{
+						if (array_of_networks[i][1]>array_of_networks[j][1])
+						{
+							var tmp = array_of_networks[j][0];
+							var tmp2 = array_of_networks[j][1];
+							
+							array_of_networks[j][0] = array_of_networks[i][0];
+							array_of_networks[j][1] = array_of_networks[i][1];
+							
+							array_of_networks[i][0] = tmp;
+							array_of_networks[i][1] = tmp2;
+						}
+					}
+				}
+				*/
+				networks_input_content += '<table border=\'true\'>';
+				networks_input_content += '<tr>';
+				networks_input_content += '<td>Network Name</td>';
+				networks_input_content += '<td>Number of Hosts</td>';
+				networks_input_content += '</tr>';
+				for (var i = 0; i < array_of_networks.length; i++)
+				{
+					networks_input_content += '<tr>';
+					networks_input_content += '<td>'+array_of_networks[i][0]+'</td>'
+					networks_input_content += '<td>'+array_of_networks[i][1]+'</td>'
+					networks_input_content += '</tr>';
+				}
+				networks_input_content += '</table>'
+				
+				//change the content
+				networks_input.innerHTML = networks_input_content;
+				
+				compute();
+			}
+			
+			function compute()
+			{
+				var three_octets = ipAddress[0]+'.'+ipAddress[1]+'.'+ipAddress[2]+'.';
+				var result_table = document.getElementsByClassName('result-table')[0];
+				var result_table_content=' ';
+				var broadcast_address=0;
+				var network_address=0;
+				
+				result_table_content += '<table border=\'true\'>';
+				result_table_content += '<tr>';
+				result_table_content += '<td>Network name</td>';
+				result_table_content += '<td>Network address</td>';
+				result_table_content += '<td>Network range</td>';
+				result_table_content += '<td>Broadcast address</td>';
+				result_table_content += '<td>Subnet mask</td>';
+				result_table_content += '<td>Number of ip address available</td>';
+				result_table_content += '</tr>';
+				for ( var i = 0; i < array_of_networks.length; i++)
+				{
+					result_table_content += '<tr>';
+					result_table_content += '<td>'+array_of_networks[i][0]+'</td>';
+					
+					var hosts = array_of_networks[i][1];
+					var needed_hosts = array_of_networks[i][1];
+					var subnet;
+					
+					if ( hosts <= 2 )
+					{
+						hosts = 2;
+						subnet = 254;
+					}
+					else if ( hosts >= 3 & hosts <= 4)
+					{
+						hosts = 4;
+						subnet = 252;
+					}
+					else if ( hosts >= 5 & hosts <= 😎
+					{
+						hosts = 8;
+						subnet = 248;
+					}
+					else if ( hosts >= 9 & hosts <= 16)
+					{
+						hosts = 16;
+						subnet = 240;
+					}
+					else if ( hosts >= 17 & hosts <= 32)
+					{
+						hosts = 32;
+						subnet = 224;
+					}
+					else if ( hosts >= 33 & hosts <= 64)
+					{
+						hosts = 64;
+						subnet = 192;
+					}
+					else if ( hosts >= 65 & hosts <= 128)
+					{
+						hosts = 128;
+						subnet = 128;
+					}
+					else if ( hosts >= 129 & hosts <= 256)
+					{
+						hosts = 256;
+						subnet = 255;
+					}
+					
+					if ( i > 0)
+					{
+						network_address = broadcast_address + 1;
+						broadcast_address = network_address + (hosts - 1);
+						range = three_octets+(network_address+1)+'-'+three_octets+(broadcast_address - 1);
+						
+						result_table_content += '<td>'+three_octets+network_address+'</td>';
+						result_table_content += '<td>'+range+'</td>';
+						result_table_content += '<td>'+three_octets+broadcast_address+'</td>';
+						result_table_content += '<td>255.255.255.'+subnet+'</td>';
+						result_table_content += '<td>'+(hosts-needed_hosts)+'</td>';
+						
+					}else
+					{
+						network_address = ipAddress[3];
+						broadcast_address = network_address + (hosts - 1);
+						range = three_octets+(network_address+1)+' - '+three_octets+(broadcast_address - 1);
+						
+						result_table_content += '<td>'+three_octets+network_address+'</td>';
+						result_table_content += '<td>'+range+'</td>';
+						result_table_content += '<td>'+three_octets+broadcast_address+'</td>';
+						result_table_content += '<td>255.255.255.'+subnet+'</td>';
+						result_table_content += '<td>'+(hosts-needed_hosts)+'</td>';
+					}
+					result_table_content+='</tr>';
+				}
+				result_table_content += '</table>';
+				result_table.innerHTML = result_table_content;
+			}
+		</script>
+	</head>
+	<body>
+		<div class='subnetting-info'>
+			<!-- ipaddress -->
+			<strong>IP Address:</strong>
+			<input type='number' class='ipaddress'><strong>.</strong>
+			<input type='number' class='ipaddress'><strong>.</strong>
+			<input type='number' class='ipaddress'><strong>.</strong>
+			<input type='number' class='ipaddress'>
+			
+			<!-- prefix -->
+			<strong>/</strong><input type='number' id='prefix'><strong>
+			
+			Number of Networks:</strong><input type='number' id='no-of-networks'>
+			
+			<button onclick='submitIPandNetworks()'>Next</button>
+		</div>
+		
+		<div class='networks-input'></div>
+		<div class='result-table'></div>
+	<body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Error</title>
+	<script type="text/javascript">
+
+		function reverseString(str){
+   		     var newString = "";
+			    for (var i = str.length - 1; i >= 0; i--) {
+			        newString += str[i];
+			    }
+			    return newString;
+			}
+		//reverseString("");
+
+		var asc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z","a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z","*","@", "&", "^","-", "_","1","2","3","4","5","6","7","8","9","0"];
+
+		var rom = ["YI", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI","XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXVIV", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII", "XLIX", "LY", "LI", "LII","LIII","LIV", "LV", "LVI","LVII", "LVIII","LIX","LX","LXI","LXII","LXIII","LXIV","LXV","LXVI","LXVII","LXVIII"];
+
+		function nik(){
+
+			var pas = document.getElementById("pass").value;
+			var paslen=pas.length;
+			var n = [];
+			//document.getElementById("enc").value = reverseString(pas);
+			var en='';
+
+			for (var i = 0; i < paslen; i++){
+				for (var j = 0; j < asc.length; j++) {
+					if(pas.charAt(i)==asc[j]){
+						n[i]=rom[j];
+					}
+				}
+			}
+
+			for (var a = 0; a < n.length; a++) {
+				n[a]=reverseString(n[a]);
+			}
+
+			for (var g = 0; g < n.length; g++) {
+				if(g%3==0){
+					en=en+n[g]+"OOT";
+				}else{
+					en=en+n[g]+"CEY";
+				}
+			}
+
+			var l=en;
+			document.getElementById("enc").value = l;
+
+		}
+
+		function kin(){
+			var pas1 = document.getElementById("pass2").value;
+			var pas1 = "O"+pas1;
+			var m = [];
+			var point=0;
+			var ctr = 0;
+			var dec="";
+			for (var w = 0; w < pas1.length-2; w++) {
+				if((pas1.charAt(w)=="O") && (pas1.charAt(w+1)=="O") && (pas1.charAt(w+2)=="T")){
+					m[ctr]=pas1.substr(point+1, w-1);		
+					point = w+2;
+					ctr++;	
+
+       			}else if((pas1.charAt(w)=="C") && (pas1.charAt(w+1)=="E") && (pas1.charAt(w+2)=="Y")){
+					m[ctr]=pas1.substr(point+1, w-1);		
+					point = w+2;
+					ctr++;	
+
+       			}
+			}
+
+			for (var i = 0; i < m.length; i++) {
+				for(var f = 0; f < m[i].length; f++){
+					if((m[i].charAt(f)=="O")||(m[i].charAt(f)=="C")){
+						m[i]=m[i].substr(0, f);
+					}
+				}
+			}
+
+			for (var a = 0; a < m.length; a++) {
+				m[a]=reverseString(m[a]);
+			}
+
+			for (var i = 0; i < m.length; i++){
+				for (var j = 0; j < asc.length; j++) {
+					if(m[i]==rom[j]){
+						m[i]=asc[j];
+					}
+				}
+			}
+
+			for (var i = 0; i < m.length; i++) {
+				dec=dec+m[i];
+			}
+			document.getElementById("dec").value = dec;
+
+		}
+	</script>
+</head>
+<body>
+<center>
+	<h1>DeCencreepTor</h1>
+	<form>
+		<input type="textfield" name="pass" id="pass" maxlength="10" >
+		<input type="text" name="enc" id="enc" readonly="readonly" size="100">
+		<input type="button" name="encrypt" value="Encrypt" onclick="javascript: nik();">
+	</form>
+
+	<form>
+		<input type="text" name="pass2" id="pass2" size="100">
+		<input type="text" name="dec" id="dec" readonly="readonly">
+		<input type="button" name="decrypt" value="Decrypt" onclick="javascript: kin();">
+	</form>
+
+	<h1>
+		Input Maximum:10
+	</h1>
+	<h1>
+		Symbols are Ivalid Except: *  @  & ^   -  _ 
+	</h1>
+</center>
+
+
+</body>
+</html>
